@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
 <script id="lumi-getcssvar">
 window.getCssVar = window.getCssVar || function(name) {
@@ -77,7 +77,12 @@ window.getCssVar = window.getCssVar || function(name) {
   } catch (e) {}
 })();
 </script>
-
+/* Forcer le fond sombre sur la page complète */
+    body {
+      background-color: #0f0f0f !important;
+      overflow-y: auto !important; /* Permet de scroller sur petit écran */
+      padding: 20px 0; /* Un peu d'espace en haut et en bas */
+    }
 <style id="lumi-runtime">
 /* luminous.css */
 /*
