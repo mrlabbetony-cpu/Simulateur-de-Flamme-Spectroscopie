@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur de Flamme & Spectroscopie</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #0d0d0d;
+            color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2vh 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #canvas-container {
+            position: relative;
+            width: 350px;
+            height: 450px;
+            background: radial-gradient(circle at 50% 80%, #1a1a1a 0%, #000 100%);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px #000;
+            overflow: hidden;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .controls {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 12px;
+            width: 350px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            box-sizing: border-box;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ddd;
+        }
+
+        input[type=range] {
+            width: 100%;
+            cursor: pointer;
+            accent-color: #ff5e00;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #0d0d0d;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            font-weight: 400;
+            margin: 0;
+            cursor: pointer;
+            color: #bbb;
+        }
+
+        .radio-group input {
+            margin-right: 10px;
+            accent-color: #00d2ff;
+        }
+
+        #status {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+            font-style: italic;
+            color: #ff9d00;
+            text-align: center;
+            font-size: 0.95em;
+            height: 40px;
+        }
+        
+        .temp-display {
+            color: #ff5e00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Simulateur de Flamme</h2>
+    
+    <div id="canvas-container">
+        <!-- La taille interne du canvas est définie pour la résolution des particules -->
+        <canvas id="flameCanvas" width="350" height="450"></canvas>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label for="tempSlider">Température: <span id="tempValue" class="temp-display">1000</span> °C</label>
+            <input type="range" id="tempSlider" min="500" max="2000" value="1000" step="10">
+        </div>
+
+        <div class="control-group">
+            <label>Spectroscopie (Additif Chimique) :</label>
+            <div class="radio-group">
+                <label><input type="radio" name="chemical" value="none" checked> Aucun (Basé sur Température)</label>
+                <label><input type="radio" name="chemical" value="cu"> Cuivre [Cu] (Vert-Émeraude)</label>
+                <label><input type="radio" name="chemical" value="sr"> Strontium [Sr] (Rouge Sang)</label>
+                <label><input type="radio" name="chemical" value="na"> Sodium [Na] (Jaune Vif)</label>
+                <label><input type="radio" name="chemical" value="k"> Potassium [K] (Lilas/Violet)</label>
+            </div>
+        </div>
+
+        <div id="status">Combustion moyenne, présence de suie incandescente.</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('flameCanvas');
+        const ctx = canvas.getContext('2d');
+        const tempSlider = document.getElementById('tempSlider');
+        const tempValue = document.getElementById('tempValue');
+        const statusText = document.getElementById('status');
+        const radios = document.querySelectorAll('input[name="chemical"]');
+
+        let particles = [];
+        let currentTemp = 1000;
+        let currentChem = 'none';
+        
+        // Ajuste la couleur du slider en fonction de la température
+        function updateSliderColor() {
+            let color = '#ff5e00'; // Default orange
+            if (currentChem === 'none') {
+                if (currentTemp < 800) color = '#ff2a00';
+                else if (currentTemp > 1400) color = '#00aeff';
+            } else {
+                if (currentChem === 'cu') color = '#00ffaa';
+                if (currentChem === 'sr') color = '#ff003c';
+                if (currentChem === 'na') color = '#ffcc00';
+                if (currentChem === 'k') color = '#d400ff';
+            }
+            tempSlider.style.accentColor = color;
+            tempValue.style.color = color;
+            statusText.style.color = color;
+        }
+
+        // Met à jour les textes d'interface
+        function updateStatus() {
+            tempValue.textContent = currentTemp;
+            
+            if (currentChem !== 'none') {
+                const chemNames = { 
+                    cu: 'Émission atomique : Cuivre (Saut quantique des électrons)', 
+                    sr: 'Émission atomique : Strontium (Feu de détresse)', 
+                    na: 'Émission atomique : Sodium (Couleur pure et saturée)', 
+                    k: 'Émission atomique : Potassium (Flamme spectrale)' 
+                };
+                statusText.textContent = chemNames[currentChem];
+            } else {
+                if (currentTemp < 800) {
+                    statusText.textContent = "Combustion incomplète : beaucoup de suie (Rouge sombre).";
+                } else if (currentTemp < 1400) {
+                    statusText.textContent = "Combustion classique : suie incandescente (Orange/Jaune).";
+                } else if (currentTemp < 1700) {
+                    statusText.textContent = "Combustion propre : peu de suie (Blanc/Bleu).";
+                } else {
+                    statusText.textContent = "Combustion parfaite : apport optimal en oxygène (Bleu pur).";
+                }
+            }
+            updateSliderColor();
+        }
+
+        // Écouteurs d'événements
+        tempSlider.addEventListener('input', (e) => {
+            currentTemp = parseInt(e.target.value);
+            updateStatus();
+        });
+
+        radios.forEach(r => r.addEventListener('change', (e) => {
+            if(e.target.checked) currentChem = e.target.value;
+            // Désactiver visuellement le slider de température si chimie active
+            if(currentChem !== 'none') {
+                tempSlider.style.opacity = '0.5';
+            } else {
+                tempSlider.style.opacity = '1';
+            }
+            updateStatus();
+        }));
+
+        // Système de particules pour la flamme
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                // Origine au centre bas
+                this.x = canvas.width / 2 + (Math.random() - 0.5) * 50;
+                this.y = canvas.height;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                // Vitesse verticale dépend un peu de la température (plus chaud = plus rapide)
+                let speedBoost = (currentTemp - 500) / 1500; 
+                this.vy = -(Math.random() * 3 + 2 + speedBoost * 2);
+                this.life = 1.0;
+                this.decay = Math.random() * 0.015 + 0.01;
+                this.size = Math.random() * 20 + 15;
+            }
+
+            update() {
+                // Mouvement ondulatoire léger
+                this.x += this.vx + Math.sin(this.life * 15) * 0.8;
+                this.y += this.vy;
+                this.life -= this.decay;
+                
+                // Réduire la taille au fur et à mesure
+                this.size *= 0.98;
+
+                if (this.life <= 0 || this.size <= 0.5) this.reset();
+            }
+
+            draw(ctx) {
+                let r, g, b;
+
+                // Gestion des couleurs
+                if (currentChem === 'none') {
+                    if (currentTemp < 800) { r = 255; g = 30; b = 0; } // Rouge
+                    else if (currentTemp < 1200) { r = 255; g = 100; b = 0; } // Orange
+                    else if (currentTemp < 1500) { r = 255; g = 200; b = 50; } // Jaune
+                    else if (currentTemp < 1800) { r = 150; g = 200; b = 255; } // Bleu pâle
+                    else { r = 0; g = 150; b = 255; } // Bleu intense
+                } else {
+                    if (currentChem === 'cu') { r = 0; g = 255; b = 150; } // Vert Cuivre
+                    else if (currentChem === 'sr') { r = 255; g = 10; b = 20; } // Rouge Strontium
+                    else if (currentChem === 'na') { r = 255; g = 220; b = 0; } // Jaune Sodium
+                    else if (currentChem === 'k') { r = 200; g = 80; b = 255; } // Violet Potassium
+                }
+
+                // Assombrir/refroidir la pointe de la flamme
+                if (currentChem === 'none' && currentTemp >= 1400 && this.life < 0.4) {
+                    r = 0; g = 50; b = 255; // Pointes bleues foncées
+                } else if (currentChem === 'none' && currentTemp < 1400 && this.life < 0.3) {
+                    r = 150; g = 30; b = 0; // Pointes fumée
+                }
+
+                // Dessin avec effet "Glow" (Composition additive)
+                ctx.globalCompositeOperation = 'lighter';
+                
+                let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${this.life})`);
+                gradient.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${this.life * 0.5})`);  
+                gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Initialisation de 120 particules pour un effet dense
+        for(let i=0; i<120; i++) particles.push(new Particle());
+
+        // Boucle d'animation
+        function animate() {
+            // Efface l'écran avec une légère transparence pour créer une traînée
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Mise à jour et rendu des particules
+            particles.forEach(p => {
+                p.update();
+                p.draw(ctx);
+            });
+            
+            requestAnimationFrame(animate);
+        }
+
+        // Lancement
+        animate();
+        updateStatus();
+    </script>
+</body>
+</html>
