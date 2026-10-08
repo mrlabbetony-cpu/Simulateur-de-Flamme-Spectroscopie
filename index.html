@@ -18,22 +18,22 @@
             box-sizing: border-box;
         }
 
-        .header-text {
+        .top-info {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
+            margin-bottom: 12px;
             font-size: 0.9em;
             color: #ccc;
-            margin-bottom: 15px;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
-        .header-text div {
-            margin-bottom: 4px;
+        .top-info div {
+            margin-bottom: 3px;
         }
 
         h2 {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             margin: 0 0 5px 0;
             color: #fff;
             text-transform: uppercase;
@@ -43,7 +43,7 @@
 
         .subtitle {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             font-size: 0.85em;
             color: #aaa;
             margin-bottom: 15px;
@@ -55,10 +55,9 @@
             border-radius: 16px;
             padding: 20px;
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.7);
             box-sizing: border-box;
-            position: relative;
         }
 
         #canvas-container {
@@ -93,22 +92,24 @@
         }
 
         .status-box {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 3px solid #ff9d00;
-            padding: 10px 12px;
+            background: #1c1c21;
+            border-left: 4px solid #ff9d00;
+            padding: 12px 15px;
             border-radius: 0 8px 8px 0;
             margin-bottom: 20px;
-            font-size: 0.85em;
         }
 
         .status-box strong {
             color: #fff;
             display: block;
             margin-bottom: 3px;
+            font-size: 0.95em;
         }
 
         .status-box span {
             color: #aaa;
+            font-size: 0.85em;
+            line-height: 1.4;
         }
 
         .control-section {
@@ -142,52 +143,50 @@
             margin-bottom: 5px;
         }
 
-        .pill-group {
+        .radio-container {
+            background: #1c1c21;
+            border: 1px solid #2a2a2e;
+            border-radius: 10px;
+            padding: 12px;
             display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .pill-btn {
-            background: #222228;
-            border: 1px solid #3a3a42;
-            color: #ccc;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8em;
+        .radio-container label {
+            display: flex;
+            align-items: center;
+            font-weight: 400;
+            color: #ddd;
+            font-size: 0.9em;
             cursor: pointer;
-            transition: all 0.2s;
+            margin: 0;
         }
 
-        .pill-btn:hover {
-            background: #33333d;
-            color: #fff;
-        }
-
-        .pill-btn.active {
-            background: #0066ff;
-            border-color: #0080ff;
-            color: #fff;
-            font-weight: 600;
+        .radio-container input[type="radio"] {
+            accent-color: #0066ff;
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
         }
 
         .footer-question {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             margin-top: 20px;
             background: #141416;
             border: 1px solid #2a2a2e;
-            padding: 12px 15px;
+            padding: 14px 18px;
             border-radius: 12px;
-            font-size: 0.85em;
+            font-size: 0.9em;
             color: #ddd;
-            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-text">
+    <div class="top-info">
         <div><strong>Baryum (Ba) :</strong> Vert pomme.</div>
         <div><strong>Bore (B) :</strong> Vert clair.</div>
     </div>
@@ -198,7 +197,7 @@
     <div id="simulator-card">
         <div id="canvas-container">
             <div id="badgeThermic" class="badge-thermic">● Thermique : Jaune vif</div>
-            <canvas id="flameCanvas" width="380" height="380"></canvas>
+            <canvas id="flameCanvas" width="400" height="380"></canvas>
         </div>
 
         <div class="status-box">
@@ -216,12 +215,12 @@
 
         <div class="control-section" style="margin-bottom:0;">
             <label>Additifs chimiques (Test de flamme)</label>
-            <div class="pill-group" id="pillGroup">
-                <button class="pill-btn active" data-chem="none">Aucun</button>
-                <button class="pill-btn" data-chem="cu">Cuivre (Cu²⁺)</button>
-                <button class="pill-btn" data-chem="sr">Strontium (Sr²⁺)</button>
-                <button class="pill-btn" data-chem="na">Sodium (Na⁺)</button>
-                <button class="pill-btn" data-chem="k">Potassium (K⁺)</button>
+            <div class="radio-container">
+                <label><input type="radio" name="chemical" value="none" checked> Aucun</label>
+                <label><input type="radio" name="chemical" value="cu"> Cuivre (Cu²⁺)</label>
+                <label><input type="radio" name="chemical" value="sr"> Strontium (Sr²⁺)</label>
+                <label><input type="radio" name="chemical" value="na"> Sodium (Na⁺)</label>
+                <label><input type="radio" name="chemical" value="k"> Potassium (K⁺)</label>
             </div>
         </div>
     </div>
@@ -238,7 +237,7 @@
         const badgeThermic = document.getElementById('badgeThermic');
         const statusTitle = document.getElementById('statusTitle');
         const statusDesc = document.getElementById('statusDesc');
-        const pillBtns = document.querySelectorAll('.pill-btn');
+        const radios = document.querySelectorAll('input[name="chemical"]');
 
         let particles = [];
         let currentTemp = 1000;
@@ -249,10 +248,10 @@
 
             if (currentChem !== 'none') {
                 const chemData = {
-                    cu: { title: `Flamme de Cuivre (${currentTemp}°C) — Vert émeraude`, desc: "Saut quantique des électrons du cuivre. Émission caractéristique verte.", badge: "● Cuivre [Cu]" },
-                    sr: { title: `Flamme de Strontium (${currentTemp}°C) — Rouge sang`, desc: "Utilisé en feux de détresse. Émission atomique intense dans le rouge.", badge: "● Strontium [Sr]" },
-                    na: { title: `Flamme de Sodium (${currentTemp}°C) — Jaune vif`, desc: "RAIE D - Émission monochromatique intense caractéristique du sodium.", badge: "● Sodium [Na]" },
-                    k: { title: `Flamme de Potassium (${currentTemp}°C) — Lilas / Violet`, desc: "Émission spectrale caractéristique dans le violet/lilas.", badge: "● Potassium [K]" }
+                    cu: { title: `Flamme thermique (${currentTemp}°C) — Vert émeraude`, desc: "Saut quantique des électrons du cuivre. Émission caractéristique verte.", badge: "● Cuivre [Cu²⁺]" },
+                    sr: { title: `Flamme thermique (${currentTemp}°C) — Rouge sang`, desc: "Utilisé en feux de détresse. Émission atomique intense dans le rouge.", badge: "● Strontium [Sr²⁺]" },
+                    na: { title: `Flamme thermique (${currentTemp}°C) — Jaune vif`, desc: "RAIE D - Émission monochromatique intense caractéristique du sodium.", badge: "● Sodium [Na⁺]" },
+                    k: { title: `Flamme thermique (${currentTemp}°C) — Lilas / Violet`, desc: "Émission spectrale caractéristique dans le violet/lilas.", badge: "● Potassium [K⁺]" }
                 };
                 badgeThermic.textContent = chemData[currentChem].badge;
                 statusTitle.textContent = chemData[currentChem].title;
@@ -265,11 +264,11 @@
                 } else if (currentTemp < 1400) {
                     badgeThermic.textContent = "● Thermique : Jaune vif";
                     statusTitle.textContent = `Flamme thermique (${currentTemp}°C) — Jaune vif`;
-                    statusDesc.textContent = "Combustion complète standard (Bunsen air ouvert). Température équilibrée.";
+                    statusDesc.textContent = "Combustion complète standard (Bunsen air ouvert). Température de réaction équilibrée.";
                 } else if (currentTemp < 1700) {
                     badgeThermic.textContent = "● Thermique : Blanc-Jaune";
                     statusTitle.textContent = `Flamme thermique (${currentTemp}°C) — Blanc-Jaune`;
-                    statusDesc.textContent = "Haute température de combustion. Grande excitation thermique et efficacité énergétique.";
+                    statusDesc.textContent = "Haute température de combustion. Grande excitation thermique et haute efficacité énergétique.";
                 } else {
                     badgeThermic.textContent = "● Thermique : Bleu intense";
                     statusTitle.textContent = `Flamme thermique (${currentTemp}°C) — Bleu pur`;
@@ -283,12 +282,12 @@
             updateUI();
         });
 
-        pillBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                pillBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentChem = btn.getAttribute('data-chem');
-                updateUI();
+        radios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    currentChem = e.target.value;
+                    updateUI();
+                }
             });
         });
 
