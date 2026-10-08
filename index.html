@@ -13,38 +13,62 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
             padding: 20px;
+            min-height: 100vh;
             box-sizing: border-box;
         }
 
-        h2 {
-            margin-top: 0;
-            margin-bottom: 5px;
-            text-align: center;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 1.2em;
+        .header-text {
+            width: 100%;
+            max-width: 420px;
+            font-size: 0.9em;
+            color: #ccc;
+            margin-bottom: 15px;
+            line-height: 1.4;
         }
 
-        .sub-title {
+        .header-text div {
+            margin-bottom: 4px;
+        }
+
+        h2 {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 0 5px 0;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.3em;
+        }
+
+        .subtitle {
+            width: 100%;
+            max-width: 420px;
             font-size: 0.85em;
             color: #aaa;
-            text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+
+        #simulator-card {
+            background: #141416;
+            border: 1px solid #2a2a2e;
+            border-radius: 16px;
+            padding: 20px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            box-sizing: border-box;
+            position: relative;
         }
 
         #canvas-container {
             position: relative;
-            width: 350px;
-            height: 400px;
-            background: radial-gradient(circle at 50% 80%, #1a1a1a 0%, #000 100%);
+            width: 100%;
+            height: 380px;
+            background: radial-gradient(circle at 50% 80%, #1f1f24 0%, #0a0a0c 100%);
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px #000;
             overflow: hidden;
-            border: 1px solid #333;
+            border: 1px solid #222;
             margin-bottom: 15px;
         }
 
@@ -54,166 +78,219 @@
             height: 100%;
         }
 
-        .controls {
-            background: #1a1a1a;
-            padding: 20px;
-            border-radius: 12px;
-            width: 350px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            border: 1px solid #333;
-            box-sizing: border-box;
+        .badge-thermic {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #444;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #fff;
+            backdrop-filter: blur(5px);
         }
 
-        .control-group {
-            margin-bottom: 15px;
+        .status-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #ff9d00;
+            padding: 10px 12px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 0.85em;
         }
 
-        .control-group:last-child {
-            margin-bottom: 0;
-        }
-
-        label {
+        .status-box strong {
+            color: #fff;
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 3px;
+        }
+
+        .status-box span {
+            color: #aaa;
+        }
+
+        .control-section {
+            margin-bottom: 20px;
+        }
+
+        .control-section label {
+            display: block;
+            font-size: 0.9em;
             font-weight: 600;
             color: #ddd;
-            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .temp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .temp-value-display {
+            color: #ff9d00;
+            font-weight: bold;
         }
 
         input[type=range] {
             width: 100%;
             cursor: pointer;
-            accent-color: #ff5e00;
+            accent-color: #ff9d00;
+            margin-bottom: 5px;
         }
 
-        .radio-group {
+        .pill-group {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             gap: 6px;
-            background: #0d0d0d;
-            padding: 10px;
-            border-radius: 8px;
         }
 
-        .radio-group label {
-            display: flex;
-            align-items: center;
-            font-weight: 400;
-            margin: 0;
+        .pill-btn {
+            background: #222228;
+            border: 1px solid #3a3a42;
+            color: #ccc;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
             cursor: pointer;
-            color: #bbb;
-            font-size: 0.85em;
+            transition: all 0.2s;
         }
 
-        .radio-group input {
-            margin-right: 8px;
-            accent-color: #00d2ff;
+        .pill-btn:hover {
+            background: #33333d;
+            color: #fff;
         }
 
-        #status {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #333;
-            font-style: italic;
-            color: #ff9d00;
-            text-align: center;
-            font-size: 0.85em;
+        .pill-btn.active {
+            background: #0066ff;
+            border-color: #0080ff;
+            color: #fff;
+            font-weight: 600;
         }
-        
-        .temp-display {
-            color: #ff5e00;
-            font-weight: bold;
+
+        .footer-question {
+            width: 100%;
+            max-width: 420px;
+            margin-top: 20px;
+            background: #141416;
+            border: 1px solid #2a2a2e;
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            color: #ddd;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <h2>Simulateur de Flamme</h2>
-    <div class="sub-title">Explorez la thermique de combustion et l'émission spectrale.</div>
-    
-    <div id="canvas-container">
-        <canvas id="flameCanvas" width="350" height="400"></canvas>
+    <div class="header-text">
+        <div><strong>Baryum (Ba) :</strong> Vert pomme.</div>
+        <div><strong>Bore (B) :</strong> Vert clair.</div>
     </div>
 
-    <div class="controls">
-        <div class="control-group">
-            <label for="tempSlider">Température: <span id="tempValue" class="temp-display">1000</span> °C</label>
+    <h2>Simulateur de Flamme & Spectroscopie</h2>
+    <div class="subtitle">Explorez la thermique de combustion et l'émission spectrale atomique par excitation thermique.</div>
+
+    <div id="simulator-card">
+        <div id="canvas-container">
+            <div id="badgeThermic" class="badge-thermic">● Thermique : Jaune vif</div>
+            <canvas id="flameCanvas" width="380" height="380"></canvas>
+        </div>
+
+        <div class="status-box">
+            <strong id="statusTitle">Flamme thermique (1000°C) — Jaune vif</strong>
+            <span id="statusDesc">Combustion complète standard (Bunsen air ouvert). Température de réaction équilibrée.</span>
+        </div>
+
+        <div class="control-section">
+            <div class="temp-header">
+                <label for="tempSlider" style="margin:0;">Température de combustion</label>
+                <span id="tempValueDisplay" class="temp-value-display">1000 °C</span>
+            </div>
             <input type="range" id="tempSlider" min="500" max="2000" value="1000" step="10">
         </div>
 
-        <div class="control-group">
+        <div class="control-section" style="margin-bottom:0;">
             <label>Additifs chimiques (Test de flamme)</label>
-            <div class="radio-group">
-                <label><input type="radio" name="chemical" value="none" checked> Aucun</label>
-                <label><input type="radio" name="chemical" value="cu"> Cuivre (Cu²⁺)</label>
-                <label><input type="radio" name="chemical" value="sr"> Strontium (Sr²⁺)</label>
-                <label><input type="radio" name="chemical" value="na"> Sodium (Na⁺)</label>
-                <label><input type="radio" name="chemical" value="k"> Potassium (K⁺)</label>
+            <div class="pill-group" id="pillGroup">
+                <button class="pill-btn active" data-chem="none">Aucun</button>
+                <button class="pill-btn" data-chem="cu">Cuivre (Cu²⁺)</button>
+                <button class="pill-btn" data-chem="sr">Strontium (Sr²⁺)</button>
+                <button class="pill-btn" data-chem="na">Sodium (Na⁺)</button>
+                <button class="pill-btn" data-chem="k">Potassium (K⁺)</button>
             </div>
         </div>
+    </div>
 
-        <div id="status">Flamme thermique (1000°C) — Jaune vif. Combustion complète standard.</div>
+    <div class="footer-question">
+        Pourquoi les flammes sont-elles rondes dans l'espace ?
     </div>
 
     <script>
         const canvas = document.getElementById('flameCanvas');
         const ctx = canvas.getContext('2d');
         const tempSlider = document.getElementById('tempSlider');
-        const tempValue = document.getElementById('tempValue');
-        const statusText = document.getElementById('status');
-        const radios = document.querySelectorAll('input[name="chemical"]');
+        const tempValueDisplay = document.getElementById('tempValueDisplay');
+        const badgeThermic = document.getElementById('badgeThermic');
+        const statusTitle = document.getElementById('statusTitle');
+        const statusDesc = document.getElementById('statusDesc');
+        const pillBtns = document.querySelectorAll('.pill-btn');
 
         let particles = [];
         let currentTemp = 1000;
         let currentChem = 'none';
-        
-        function updateSliderColor() {
-            let color = '#ff5e00';
-            if (currentChem === 'none') {
-                if (currentTemp < 800) color = '#ff2a00';
-                else if (currentTemp > 1400) color = '#00aeff';
-            } else {
-                if (currentChem === 'cu') color = '#00ffaa';
-                if (currentChem === 'sr') color = '#ff003c';
-                if (currentChem === 'na') color = '#ffcc00';
-                if (currentChem === 'k') color = '#d400ff';
-            }
-            tempSlider.style.accentColor = color;
-            tempValue.style.color = color;
-        }
 
-        function updateStatus() {
-            tempValue.textContent = currentTemp;
-            
+        function updateUI() {
+            tempValueDisplay.textContent = currentTemp + ' °C';
+
             if (currentChem !== 'none') {
-                const chemNames = { 
-                    cu: `Flamme thermique (${currentTemp}°C) — Vert émeraude (Cuivre)`, 
-                    sr: `Flamme thermique (${currentTemp}°C) — Rouge sang (Strontium)`, 
-                    na: `Flamme thermique (${currentTemp}°C) — Jaune vif (Sodium)`, 
-                    k: `Flamme thermique (${currentTemp}°C) — Lilas/Violet (Potassium)` 
+                const chemData = {
+                    cu: { title: `Flamme de Cuivre (${currentTemp}°C) — Vert émeraude`, desc: "Saut quantique des électrons du cuivre. Émission caractéristique verte.", badge: "● Cuivre [Cu]" },
+                    sr: { title: `Flamme de Strontium (${currentTemp}°C) — Rouge sang`, desc: "Utilisé en feux de détresse. Émission atomique intense dans le rouge.", badge: "● Strontium [Sr]" },
+                    na: { title: `Flamme de Sodium (${currentTemp}°C) — Jaune vif`, desc: "RAIE D - Émission monochromatique intense caractéristique du sodium.", badge: "● Sodium [Na]" },
+                    k: { title: `Flamme de Potassium (${currentTemp}°C) — Lilas / Violet`, desc: "Émission spectrale caractéristique dans le violet/lilas.", badge: "● Potassium [K]" }
                 };
-                statusText.textContent = chemNames[currentChem];
+                badgeThermic.textContent = chemData[currentChem].badge;
+                statusTitle.textContent = chemData[currentChem].title;
+                statusDesc.textContent = chemData[currentChem].desc;
             } else {
                 if (currentTemp < 800) {
-                    statusText.textContent = `Flamme thermique (${currentTemp}°C) — Rouge sombre. Combustion incomplète, suie.`;
+                    badgeThermic.textContent = "● Thermique : Rouge sombre";
+                    statusTitle.textContent = `Flamme thermique (${currentTemp}°C) — Rouge sombre`;
+                    statusDesc.textContent = "Combustion incomplète, présence importante de suie incandescente.";
                 } else if (currentTemp < 1400) {
-                    statusText.textContent = `Flamme thermique (${currentTemp}°C) — Jaune vif. Combustion complète standard.`;
+                    badgeThermic.textContent = "● Thermique : Jaune vif";
+                    statusTitle.textContent = `Flamme thermique (${currentTemp}°C) — Jaune vif`;
+                    statusDesc.textContent = "Combustion complète standard (Bunsen air ouvert). Température équilibrée.";
+                } else if (currentTemp < 1700) {
+                    badgeThermic.textContent = "● Thermique : Blanc-Jaune";
+                    statusTitle.textContent = `Flamme thermique (${currentTemp}°C) — Blanc-Jaune`;
+                    statusDesc.textContent = "Haute température de combustion. Grande excitation thermique et efficacité énergétique.";
                 } else {
-                    statusText.textContent = `Flamme thermique (${currentTemp}°C) — Bleu/Blanc. Combustion vive, oxygénée.`;
+                    badgeThermic.textContent = "● Thermique : Bleu intense";
+                    statusTitle.textContent = `Flamme thermique (${currentTemp}°C) — Bleu pur`;
+                    statusDesc.textContent = "Combustion sur-oxygénée, plasma thermique intense, absence totale de suie.";
                 }
             }
-            updateSliderColor();
         }
 
         tempSlider.addEventListener('input', (e) => {
             currentTemp = parseInt(e.target.value);
-            updateStatus();
+            updateUI();
         });
 
-        radios.forEach(r => r.addEventListener('change', (e) => {
-            if(e.target.checked) currentChem = e.target.value;
-            updateStatus();
-        }));
+        pillBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                pillBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentChem = btn.getAttribute('data-chem');
+                updateUI();
+            });
+        });
 
         class Particle {
             constructor() {
@@ -224,15 +301,15 @@
                 this.x = canvas.width / 2 + (Math.random() - 0.5) * 40;
                 this.y = canvas.height;
                 this.vx = (Math.random() - 0.5) * 1.2;
-                let speedBoost = (currentTemp - 500) / 1500; 
+                let speedBoost = (currentTemp - 500) / 1500;
                 this.vy = -(Math.random() * 3 + 2 + speedBoost * 2);
                 this.life = 1.0;
                 this.decay = Math.random() * 0.015 + 0.01;
-                this.size = Math.random() * 18 + 12;
+                this.size = Math.random() * 20 + 12;
             }
 
             update() {
-                this.x += this.vx + Math.sin(this.life * 15) * 0.6;
+                this.x += this.vx + Math.sin(this.life * 12) * 0.7;
                 this.y += this.vy;
                 this.life -= this.decay;
                 this.size *= 0.98;
@@ -245,14 +322,14 @@
 
                 if (currentChem === 'none') {
                     if (currentTemp < 800) { r = 255; g = 30; b = 0; }
-                    else if (currentTemp < 1200) { r = 255; g = 100; b = 0; }
-                    else if (currentTemp < 1500) { r = 255; g = 200; b = 50; }
-                    else { r = 0; g = 150; b = 255; }
+                    else if (currentTemp < 1200) { r = 255; g = 120; b = 0; }
+                    else if (currentTemp < 1600) { r = 255; g = 220; b = 100; }
+                    else { r = 150; g = 200; b = 255; }
                 } else {
                     if (currentChem === 'cu') { r = 0; g = 255; b = 150; }
-                    else if (currentChem === 'sr') { r = 255; g = 10; b = 20; }
-                    else if (currentChem === 'na') { r = 255; g = 220; b = 0; }
-                    else if (currentChem === 'k') { r = 200; g = 80; b = 255; }
+                    else if (currentChem === 'sr') { r = 255; g = 20; b = 40; }
+                    else if (currentChem === 'na') { r = 255; g = 230; b = 0; }
+                    else if (currentChem === 'k') { r = 200; g = 100; b = 255; }
                 }
 
                 ctx.globalCompositeOperation = 'lighter';
@@ -269,11 +346,11 @@
             }
         }
 
-        for(let i=0; i<100; i++) particles.push(new Particle());
+        for(let i=0; i<120; i++) particles.push(new Particle());
 
         function animate() {
             ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+            ctx.fillStyle = 'rgba(10, 10, 12, 0.35)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             particles.forEach(p => {
@@ -285,7 +362,7 @@
         }
 
         animate();
-        updateStatus();
+        updateUI();
     </script>
 </body>
 </html>
